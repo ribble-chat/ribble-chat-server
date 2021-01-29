@@ -1,4 +1,5 @@
 using System;
+using RibbleChatServer.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,6 +29,7 @@ namespace RibbleChatServer
         {
 
             services.AddControllers();
+            services.AddSignalR();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RibbleChatServer", Version = "v1" });
@@ -45,15 +47,15 @@ namespace RibbleChatServer
             }
 
             app.UseHttpsRedirection();
-
+            app.UseWebSockets();
+            app.UseCors();
             app.UseRouting();
-
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+                {
+                    endpoints.MapControllers();
+                    endpoints.MapHub<ChatHub>("/chat");
+                });
         }
     }
 }
