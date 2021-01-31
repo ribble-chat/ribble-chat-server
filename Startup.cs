@@ -1,17 +1,11 @@
-using System;
 using RibbleChatServer.Services;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using MessagePack;
 
 namespace RibbleChatServer
 {
@@ -29,6 +23,12 @@ namespace RibbleChatServer
         {
 
             services.AddControllers();
+            services.AddSignalR().AddMessagePackProtocol(options =>
+        {
+            options.SerializerOptions = MessagePackSerializerOptions.Standard
+            .WithSecurity(MessagePackSecurity.UntrustedData);
+
+        });
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
