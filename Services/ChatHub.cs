@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 
@@ -8,7 +7,7 @@ namespace RibbleChatServer.Services
     {
         public async Task SendMessage(string user, string message)
         {
-            await Clients.All.SendAsync("message-received", user, message);
+            await Clients.All.SendAsync("ReceiveMessage", user, message);
         }
     }
 }

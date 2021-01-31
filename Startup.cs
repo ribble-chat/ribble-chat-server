@@ -23,12 +23,6 @@ namespace RibbleChatServer
         {
 
             services.AddControllers();
-            services.AddSignalR().AddMessagePackProtocol(options =>
-        {
-            options.SerializerOptions = MessagePackSerializerOptions.Standard
-            .WithSecurity(MessagePackSecurity.UntrustedData);
-
-        });
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
@@ -54,7 +48,7 @@ namespace RibbleChatServer
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "RibbleChatServer v1"));
             }
 
-            // app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             app.UseWebSockets();
             app.UseCors();
             app.UseRouting();
