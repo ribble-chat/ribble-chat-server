@@ -4,8 +4,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using MessagePack;
+using RibbleChatServer.Data;
 
 namespace RibbleChatServer
 {
@@ -23,6 +24,10 @@ namespace RibbleChatServer
         {
 
             services.AddControllers();
+            services.AddSignalR();
+            services.AddEntityFrameworkNpgsql().AddDbContext<ChatDbContext>(options =>
+                options.UseNpgsql(Configuration.GetConnectionString("DbContext")));
+
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
@@ -31,11 +36,9 @@ namespace RibbleChatServer
                         .AllowCredentials();
                 });
             });
-            services.AddSignalR();
+
             services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "RibbleChatServer", Version = "v1" });
-            });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "RibbleChatServer", Version = "v1" }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,7 +51,7 @@ namespace RibbleChatServer
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "RibbleChatServer v1"));
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
             app.UseWebSockets();
             app.UseCors();
             app.UseRouting();

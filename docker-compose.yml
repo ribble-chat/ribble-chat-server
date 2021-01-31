@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  chat-server:
+    build: .
+    container_name: "ribble-server"
+    depends_on: 
+      - db
+    ports: 
+      - "5000:5000"
+      - "5001:5001"
+  db:
+    image: "postgres:13.1"
+    environment: 
+      POSTGRES_USER: "ribble-server"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "ribble-server"
+    ports: 
+      - "5432:5432"
+            
