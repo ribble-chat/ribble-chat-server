@@ -12,7 +12,7 @@ namespace RibbleChatServer.Services
         }
         public async Task SendMessageToGroup(string groupName, string msg)
         {
-            await Clients.Group(groupName).SendAsync("sent-message-to-group", Context.ConnectionId, msg);
+            await Clients.Group(groupName).SendAsync("message-received", Context.ConnectionId, msg);
         }
     }
 }
