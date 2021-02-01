@@ -9,5 +9,11 @@ namespace RibbleChatServer.Services
         {
             await Clients.All.SendAsync("message-received", user, message);
         }
+
+        public async Task JoinGroup(string groupName)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+        }
+
     }
 }

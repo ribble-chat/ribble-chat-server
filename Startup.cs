@@ -26,7 +26,7 @@ namespace RibbleChatServer
             services.AddControllers();
             services.AddSignalR();
             services.AddEntityFrameworkNpgsql().AddDbContext<ChatDbContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("DbContext")));
+                options.UseNpgsql(Configuration.GetConnectionString("ChatDbContext")));
 
             services.AddCors(options =>
             {
