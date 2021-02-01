@@ -10,10 +10,10 @@ namespace RibbleChatServer.Services
             await Clients.All.SendAsync("message-received", user, message);
         }
 
-        public async Task JoinGroup(string groupName)
+        public async Task JoinGroup(string groupName, string user)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+            await Clients.Group(groupName).SendAsync("joined-group", groupName, Context.ConnectionId);
         }
-
     }
 }
