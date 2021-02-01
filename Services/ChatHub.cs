@@ -5,15 +5,14 @@ namespace RibbleChatServer.Services
 {
     public class ChatHub : Hub
     {
-        public async Task SendMessage(string user, string message)
-        {
-            await Clients.All.SendAsync("message-received", user, message);
-        }
-
-        public async Task JoinGroup(string groupName, string user)
+        public async Task JoinGroup(string groupName, string connectionId)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
             await Clients.Group(groupName).SendAsync("joined-group", groupName, Context.ConnectionId);
+        }
+        public async Task SendMessageToGroup(string groupName, string msg)
+        {
+            await Clients.Group(groupName).SendAsync("sent-message-to-group", Context.ConnectionId, msg);
         }
     }
 }
