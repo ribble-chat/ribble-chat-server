@@ -7,6 +7,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using RibbleChatServer.Data;
+using Microsoft.AspNetCore.Identity;
+using System;
+using RibbleChatServer.Models;
 
 namespace RibbleChatServer
 {
@@ -24,9 +27,51 @@ namespace RibbleChatServer
         {
 
             services.AddControllers();
+            services.AddAuthentication();
             services.AddSignalR();
-            services.AddEntityFrameworkNpgsql().AddDbContext<ChatDbContext>(options =>
+            services.AddDbContext<ChatDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("ChatDbContext")));
+
+            services.AddIdentity<User, Role>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<ChatDbContext>()
+                .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password = new PasswordOptions
+                {
+                    RequireDigit = true,
+                    RequireLowercase = true,
+                    RequireUppercase = true,
+                    RequireNonAlphanumeric = false,
+                    RequiredLength = 8,
+                    RequiredUniqueChars = 1,
+                };
+
+                options.Lockout = new LockoutOptions
+                {
+                    DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5),
+                    MaxFailedAccessAttempts = 5,
+                    AllowedForNewUsers = true,
+                };
+
+                options.User = new UserOptions
+                {
+                    AllowedUserNameCharacters =
+                        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+",
+                    RequireUniqueEmail = true,
+                };
+
+
+            });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                options.LoginPath = "/api/identity/account/login";
+                options.SlidingExpiration = true;
+            });
 
             services.AddCors(options =>
             {
@@ -55,6 +100,7 @@ namespace RibbleChatServer
             app.UseWebSockets();
             app.UseCors();
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
                 {
