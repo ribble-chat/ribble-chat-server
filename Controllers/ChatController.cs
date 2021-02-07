@@ -19,6 +19,7 @@ public class ChatController : ControllerBase
     }
 
     [HttpGet]
+
     [Route("/api")]
     public IActionResult RibbleApiRoot()
     {
@@ -28,16 +29,15 @@ public class ChatController : ControllerBase
     [HttpPost]
     [Route("/api/users")]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<User>> Register([FromBody] RegisterUserInfo userInfo)
     {
-        System.Console.WriteLine("hello");
-        System.Console.WriteLine(userInfo);
         var user = new User
         {
             FirstName = userInfo.FirstName,
             LastName = userInfo.LastName,
+            UserName = userInfo.Username,
             Email = userInfo.Email,
         };
 
@@ -52,8 +52,11 @@ public class ChatController : ControllerBase
     {
         var user = userManager.Users.SingleOrDefault(u =>
             u.UserName == loginInfo.UsernameOrEmail || u.Email == loginInfo.UsernameOrEmail);
-        if (user is null) return NotFound($"User with email or username {loginInfo} does not exist");
-        if (await userManager.CheckPasswordAsync(user, loginInfo.Password)) return Ok();
-        else return BadRequest("Incorrect Password");
+        if (user is null)
+            return NotFound($"User with email or username {loginInfo} does not exist");
+        if (await userManager.CheckPasswordAsync(user, loginInfo.Password))
+            return Ok();
+        else
+            return BadRequest("Incorrect Password");
     }
 }

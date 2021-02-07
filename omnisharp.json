@@ -1,7 +1,5 @@
 {
     "FormattingOptions": {
-        "EnableEditorConfigSupport": true,
-        "WrappingPreserveSingleLine": false,
-        "WrappingKeepStatementsOnSingleLine": false
+        "EnableEditorConfigSupport": true
     }
 }
