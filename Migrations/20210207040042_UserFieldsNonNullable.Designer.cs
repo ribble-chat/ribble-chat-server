@@ -9,7 +9,7 @@ using RibbleChatServer.Data;
 
 namespace RibbleChatServer.Migrations
 {
-    [DbContext(typeof(ChatDbContext))]
+    [DbContext(typeof(UserDbContext))]
     [Migration("20210207040042_UserFieldsNonNullable")]
     partial class UserFieldsNonNullable
     {

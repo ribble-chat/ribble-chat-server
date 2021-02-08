@@ -8,7 +8,7 @@ using RibbleChatServer.Data;
 
 namespace RibbleChatServer.Migrations
 {
-    [DbContext(typeof(ChatDbContext))]
+    [DbContext(typeof(UserDbContext))]
     partial class ChatDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

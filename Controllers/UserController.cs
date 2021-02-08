@@ -7,12 +7,12 @@ using RibbleChatServer.Data;
 using RibbleChatServer.Models;
 
 [ApiController]
-public class ChatController : ControllerBase
+public class UserController : ControllerBase
 {
-    private readonly ChatDbContext dbContext;
+    private readonly UserDbContext dbContext;
     private readonly UserManager<User> userManager;
 
-    public ChatController(ChatDbContext dbContext, UserManager<User> userManager)
+    public UserController(UserDbContext dbContext, UserManager<User> userManager, ChatDb db)
     {
         this.dbContext = dbContext;
         this.userManager = userManager;
@@ -28,9 +28,6 @@ public class ChatController : ControllerBase
 
     [HttpPost]
     [Route("/api/users")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<User>> Register([FromBody] RegisterUserInfo userInfo)
     {
         var user = new User
@@ -42,8 +39,9 @@ public class ChatController : ControllerBase
         };
 
         var userCreationResult = await userManager.CreateAsync(user, userInfo.Password);
-        if (userCreationResult.Succeeded) return Created("", user);
-        return Problem(userCreationResult.Errors.First().Description, null, 422);
+        if (!userCreationResult.Succeeded)
+            return Problem(userCreationResult.Errors.First().Description, null, 422);
+        return Created("", user);
     }
 
     [HttpPost]
