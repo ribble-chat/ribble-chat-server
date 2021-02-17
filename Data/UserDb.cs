@@ -10,6 +10,5 @@ namespace RibbleChatServer.Data
         public UserDbContext([NotNullAttribute] DbContextOptions options) : base(options)
         {
         }
-
     }
 }

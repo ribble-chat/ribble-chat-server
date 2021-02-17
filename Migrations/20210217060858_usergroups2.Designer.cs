@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RibbleChatServer.Data;
@@ -9,9 +10,10 @@ using RibbleChatServer.Data;
 namespace RibbleChatServer.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    partial class ChatDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210217060858_usergroups2")]
+    partial class usergroups2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

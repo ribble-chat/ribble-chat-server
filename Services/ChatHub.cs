@@ -1,14 +1,17 @@
+using Cassandra;
 using Microsoft.AspNetCore.SignalR;
 using RibbleChatServer.Data;
+using RibbleChatServer.Models;
+using System;
 using System.Threading.Tasks;
 
 namespace RibbleChatServer.Services
 {
     public class ChatHub : Hub
     {
-        private ChatDb chatDb;
+        private IChatDb chatDb;
 
-        public ChatHub(ChatDb chatDb)
+        public ChatHub(IChatDb chatDb)
         {
             this.chatDb = chatDb;
         }
@@ -19,9 +22,23 @@ namespace RibbleChatServer.Services
             await Clients.Group(groupName).SendAsync("joined-group", groupName, Context.ConnectionId);
         }
 
-        public async Task SendMessageToGroup(string groupName, string msg)
+
+        public async Task SendMessage(SendMessageRequest request)
         {
-            await Clients.Group(groupName).SendAsync("message-received", Context.ConnectionId, msg);
+            var (authorId, authorName, groupId, content) = request;
+            var message = new ChatMessage
+            {
+                MessageId = TimeUuid.NewId(),
+                Timestamp = DateTimeOffset.Now,
+                GroupId = groupId,
+                AuthorName = authorName,
+                AuthorId = authorId,
+                Content = content,
+            };
+            await Clients.Group(groupId.ToString())
+                .SendAsync("message-received", message);
+            await chatDb.AddMessage(message);
         }
     }
+
 }

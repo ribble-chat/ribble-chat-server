@@ -24,7 +24,7 @@ namespace RibbleChatServer
         {
 
             services.AddControllers();
-            services.AddSingleton<ChatDb, ChatDb>();
+            services.AddSingleton<IChatDb, ChatDb>();
             services.AddAuthentication();
             services.AddSignalR();
             services.AddDbContext<UserDbContext>(options =>
@@ -39,11 +39,8 @@ namespace RibbleChatServer
                 options.Password = new PasswordOptions
                 {
                     RequireDigit = true,
-                    RequireLowercase = true,
-                    RequireUppercase = true,
-                    RequireNonAlphanumeric = false,
+                    RequireUppercase = false,
                     RequiredLength = 8,
-                    RequiredUniqueChars = 1,
                 };
 
                 options.Lockout = new LockoutOptions

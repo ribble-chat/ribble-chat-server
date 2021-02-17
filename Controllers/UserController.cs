@@ -12,7 +12,7 @@ public class UserController : ControllerBase
     private readonly UserDbContext dbContext;
     private readonly UserManager<User> userManager;
 
-    public UserController(UserDbContext dbContext, UserManager<User> userManager, ChatDb db)
+    public UserController(UserDbContext dbContext, UserManager<User> userManager, IChatDb db)
     {
         this.dbContext = dbContext;
         this.userManager = userManager;
@@ -51,7 +51,7 @@ public class UserController : ControllerBase
         var user = userManager.Users.SingleOrDefault(u =>
             u.UserName == loginInfo.UsernameOrEmail || u.Email == loginInfo.UsernameOrEmail);
         if (user is null)
-            return NotFound($"User with email or username {loginInfo} does not exist");
+            return NotFound($"User with email or username {loginInfo.UsernameOrEmail} does not exist");
         if (await userManager.CheckPasswordAsync(user, loginInfo.Password))
             return Ok();
         else

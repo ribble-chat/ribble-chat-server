@@ -27,7 +27,8 @@
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
 		"ms-dotnettools.csharp",
-		"pascalsenn.keyboard-quickfix"
+		"pascalsenn.keyboard-quickfix",
+		"eservice-online.vs-sharper"
 	]
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.

@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
 
 namespace RibbleChatServer.Models
@@ -7,6 +9,8 @@ namespace RibbleChatServer.Models
     {
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
+        [JsonIgnore]
+        public List<Group> Groups { get; set; } = new List<Group>();
     }
 
     public record RegisterUserInfo
@@ -27,7 +31,7 @@ namespace RibbleChatServer.Models
         public string Password { get; set; } = null!;
     }
 
-    public class LoginUserInfo
+    public record LoginUserInfo
     {
         [Required]
         public string UsernameOrEmail { get; set; } = null!;
