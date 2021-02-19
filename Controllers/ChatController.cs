@@ -15,7 +15,7 @@ namespace RibbleChatServer.Controllers
         public ChatController(UserDbContext userDb) => this.userDb = userDb;
 
         [HttpPost]
-        [Route("/api/chat/group")]
+        [Route("/api/chat/groups")]
         public async Task<ActionResult<GroupResponse>> CreateGroup([FromBody] CreateGroupRequest request)
         {
             var (groupName, userIds) = request;

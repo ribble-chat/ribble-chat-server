@@ -19,7 +19,6 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
-
     [Route("/api")]
     public IActionResult RibbleApiRoot()
     {
