@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace RibbleChatServer.Models
 {
@@ -14,8 +15,14 @@ namespace RibbleChatServer.Models
     public record GroupResponse
     {
         public GroupResponse(Guid id, string name, List<Guid> userIds) => (Id, Name, UserIds) = (id, name, userIds ?? new List<Guid>());
+
+        [JsonPropertyName("id")]
         public Guid Id { get; init; }
+
+        [JsonPropertyName("name")]
         public string Name { get; init; }
+
+        [JsonPropertyName("userIds")]
         public List<Guid> UserIds { get; init; } = new List<Guid>();
 
         public static explicit operator GroupResponse(Group g) => new GroupResponse(

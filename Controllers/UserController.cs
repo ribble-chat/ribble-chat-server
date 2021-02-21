@@ -38,7 +38,7 @@ public class UserController : ControllerBase
         var userCreationResult = await userManager.CreateAsync(user, userInfo.Password);
         if (!userCreationResult.Succeeded)
             return Problem(userCreationResult.Errors.First().Description, null, 422);
-        return Created("", user);
+        return Created("", (UserResponse)user);
     }
 
     [HttpPost]
