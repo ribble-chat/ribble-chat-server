@@ -26,15 +26,14 @@ namespace RibbleChatServer.Services
         public async Task SendMessage(SendMessageRequest request)
         {
             var (authorId, authorName, groupId, content) = request;
-            var message = new ChatMessage
-            {
-                MessageId = TimeUuid.NewId(),
-                Timestamp = DateTimeOffset.Now,
-                GroupId = groupId,
-                AuthorName = authorName,
-                AuthorId = authorId,
-                Content = content,
-            };
+            var message = new ChatMessage(
+                GroupId: groupId,
+                MessageId: TimeUuid.NewId(),
+                Timestamp: DateTimeOffset.UtcNow,
+                AuthorName: authorName,
+                AuthorId: authorId,
+                Content: content
+            );
             await Clients.Group(groupId.ToString())
                 .SendAsync("message-received", message);
             await chatDb.AddMessage(message);

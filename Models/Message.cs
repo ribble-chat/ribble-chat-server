@@ -9,28 +9,28 @@ namespace RibbleChatServer.Models
 
     [Table("messages")]
     public record ChatMessage
-    {
-        [PartitionKey]
-        [ClusteringKey(0, SortOrder.Descending)]
-        [Column("message_id")]
-        public TimeUuid MessageId { get; set; }
+    (
+        [property:PartitionKey]
+        [property:Column("group_id")]
+        TimeUuid GroupId,
 
-        [Column("group_id")]
-        [ClusteringKey(1, SortOrder.Descending)]
-        public TimeUuid GroupId { get; set; }
+        [property:ClusteringKey(0, SortOrder.Descending)]
+        [property:Column("message_id")]
+        TimeUuid MessageId,
 
-        [Column("author_id")]
-        public long AuthorId { get; set; }
+        [property:Column("author_id")]
+        long AuthorId,
 
-        [Column("time_stamp")]
-        public DateTimeOffset Timestamp { get; set; }
+        [property:Column("time_stamp")]
+        DateTimeOffset Timestamp,
 
-        [Column("author_name")]
-        public string AuthorName { get; set; } = null!;
+        [property:Column("author_name")]
+        string AuthorName,
 
-        [Column("content")]
-        public string Content { get; set; } = null!;
-    };
+        [property:Column("content")]
+        string Content
+    );
+
 
 
 }

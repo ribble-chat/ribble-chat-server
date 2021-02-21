@@ -28,7 +28,8 @@
 	"extensions": [
 		"ms-dotnettools.csharp",
 		"pascalsenn.keyboard-quickfix",
-		"eservice-online.vs-sharper"
+		"eservice-online.vs-sharper",
+		"will-wow.vscode-open-buffers"
 	]
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.

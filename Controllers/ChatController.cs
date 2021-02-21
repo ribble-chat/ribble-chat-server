@@ -19,8 +19,7 @@ namespace RibbleChatServer.Controllers
         public async Task<ActionResult<GroupResponse>> CreateGroup([FromBody] CreateGroupRequest request)
         {
             var (groupName, userIds) = request;
-            // var userGroups = userIds.Select(userId => new UserGroup { UserId = userId, });
-            var newGroup = new Group { Name = groupName };
+            var newGroup = new Group(name: groupName);
             var entity = await userDb.AddAsync(newGroup);
             var group = entity.Entity;
             group.Users.AddRange(userIds.Select(userId => userDb.Users.Find(userId)));

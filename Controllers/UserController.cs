@@ -29,14 +29,12 @@ public class UserController : ControllerBase
     [Route("/api/users")]
     public async Task<ActionResult<User>> Register([FromBody] RegisterUserInfo userInfo)
     {
-        var user = new User
-        {
-            FirstName = userInfo.FirstName,
-            LastName = userInfo.LastName,
-            UserName = userInfo.Username,
-            Email = userInfo.Email,
-        };
-
+        var user = new User(
+            firstname: userInfo.FirstName,
+            lastname: userInfo.LastName,
+            username: userInfo.Username,
+            email: userInfo.Email
+        );
         var userCreationResult = await userManager.CreateAsync(user, userInfo.Password);
         if (!userCreationResult.Succeeded)
             return Problem(userCreationResult.Errors.First().Description, null, 422);

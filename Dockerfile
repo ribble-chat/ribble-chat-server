@@ -4,6 +4,8 @@ WORKDIR /ribble-server
 COPY *.csproj ./
 
 RUN dotnet restore
+RUN dotnet tool install --global dotnet-ef
+RUN export PATH="$PATH:$HOME/.dotnet/tools"
 
 COPY * ./
 
