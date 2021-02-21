@@ -1,5 +1,5 @@
-using Cassandra;
 using System;
+using Cassandra;
 using Cassandra.Mapping.Attributes;
 using Cassandra.Mapping;
 

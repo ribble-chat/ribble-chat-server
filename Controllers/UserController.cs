@@ -30,10 +30,10 @@ public class UserController : ControllerBase
     public async Task<ActionResult<User>> Register([FromBody] RegisterUserInfo userInfo)
     {
         var user = new User(
-            firstname: userInfo.FirstName,
-            lastname: userInfo.LastName,
-            username: userInfo.Username,
-            email: userInfo.Email
+            FirstName: userInfo.FirstName,
+            LastName: userInfo.LastName,
+            UserName: userInfo.Username,
+            Email: userInfo.Email
         );
         var userCreationResult = await userManager.CreateAsync(user, userInfo.Password);
         if (!userCreationResult.Succeeded)
@@ -45,8 +45,9 @@ public class UserController : ControllerBase
     [Route("/api/auth")]
     public async Task<IActionResult> Login(LoginUserInfo loginInfo)
     {
-        var user = userManager.Users.SingleOrDefault(u =>
-            u.UserName == loginInfo.UsernameOrEmail || u.Email == loginInfo.UsernameOrEmail);
+        var user = await userManager.FindByEmailAsync(loginInfo.UsernameOrEmail)
+            ?? await userManager.FindByNameAsync(loginInfo.UsernameOrEmail);
+
         if (user is null)
             return NotFound($"User with email or username {loginInfo.UsernameOrEmail} does not exist");
         if (await userManager.CheckPasswordAsync(user, loginInfo.Password))

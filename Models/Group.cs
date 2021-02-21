@@ -6,11 +6,13 @@ using System.Linq;
 
 namespace RibbleChatServer.Models
 {
-    public record CreateGroupRequest([Required] string GroupName, [Required] List<int> UserIds);
+    public record CreateGroupRequest(
+        [Required] string GroupName,
+        [Required] List<Guid> UserIds
+    );
 
     public record GroupResponse
     {
-
         public GroupResponse(Guid id, string name, List<Guid> userIds) => (Id, Name, UserIds) = (id, name, userIds ?? new List<Guid>());
         public Guid Id { get; init; }
         public string Name { get; init; }

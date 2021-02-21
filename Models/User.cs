@@ -8,7 +8,8 @@ namespace RibbleChatServer.Models
 {
     public class User : IdentityUser<Guid>
     {
-        public User(string firstname, string lastname, string username, string email) => (FirstName, LastName, UserName, Email) = (firstname, lastname, username, email);
+        public User(string FirstName, string LastName, string UserName, string Email) =>
+            (this.FirstName, this.LastName, this.UserName, this.Email) = (FirstName, LastName, UserName, Email);
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public List<Group> Groups { get; set; } = new List<Group>();
@@ -21,7 +22,6 @@ namespace RibbleChatServer.Models
         [Required] string LastName,
         [Required] string Password
     );
-
 
     public record LoginUserInfo
     {
