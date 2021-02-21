@@ -25,7 +25,6 @@ namespace RibbleChatServer.Models
 
     public record Group
     {
-
         public Group(string name) => Name = name;
 
         [Key]

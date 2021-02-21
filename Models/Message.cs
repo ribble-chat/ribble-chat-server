@@ -15,14 +15,14 @@ namespace RibbleChatServer.Models
         TimeUuid GroupId,
 
         [property:ClusteringKey(0, SortOrder.Descending)]
+        [property:Column("time_stamp")]
+        DateTimeOffset Timestamp,
+
         [property:Column("message_id")]
         TimeUuid MessageId,
 
         [property:Column("author_id")]
         long AuthorId,
-
-        [property:Column("time_stamp")]
-        DateTimeOffset Timestamp,
 
         [property:Column("author_name")]
         string AuthorName,

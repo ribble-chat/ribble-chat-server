@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using RibbleChatServer.Models;
 
 namespace RibbleChatServer.Data
-
 {
     public class ChatDb : IChatDb
     {

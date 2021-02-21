@@ -22,7 +22,6 @@ namespace RibbleChatServer.Services
             await Clients.Group(groupName).SendAsync("joined-group", groupName, Context.ConnectionId);
         }
 
-
         public async Task SendMessage(SendMessageRequest request)
         {
             var (authorId, authorName, groupId, content) = request;
