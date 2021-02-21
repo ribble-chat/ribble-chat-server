@@ -5,7 +5,7 @@ COPY *.csproj ./
 
 RUN dotnet restore
 RUN dotnet tool install --global dotnet-ef
-RUN export PATH="$PATH:$HOME/.dotnet/tools"
+RUN export PATH="$PATH:/root/.dotnet/tools"
 
 COPY * ./
 

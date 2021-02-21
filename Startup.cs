@@ -28,7 +28,9 @@ namespace RibbleChatServer
             services.AddAuthentication();
             services.AddSignalR();
             services.AddDbContext<UserDbContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("ChatDbContext")));
+                options
+                .UseNpgsql(Configuration.GetConnectionString("ChatDbContext"))
+                .UseSnakeCaseNamingConvention());
 
             services.AddIdentity<User, Role>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<UserDbContext>()
@@ -40,6 +42,7 @@ namespace RibbleChatServer
                 {
                     RequireDigit = true,
                     RequireUppercase = false,
+                    RequireNonAlphanumeric = false,
                     RequiredLength = 8,
                 };
 
