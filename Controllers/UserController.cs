@@ -1,6 +1,5 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RibbleChatServer.Data;
@@ -11,11 +10,13 @@ public class UserController : ControllerBase
 {
     private readonly UserDbContext dbContext;
     private readonly UserManager<User> userManager;
+    private readonly SignInManager<User> signInManager;
 
-    public UserController(UserDbContext dbContext, UserManager<User> userManager, IChatDb db)
+    public UserController(UserDbContext dbContext, UserManager<User> userManager, SignInManager<User> signInManager, IChatDb db)
     {
         this.dbContext = dbContext;
         this.userManager = userManager;
+        this.signInManager = signInManager;
     }
 
     [HttpGet]
@@ -29,6 +30,8 @@ public class UserController : ControllerBase
     [Route("/api/users")]
     public async Task<ActionResult<User>> Register([FromBody] RegisterUserInfo userInfo)
     {
+        var zxcvbnResult = Zxcvbn.Core.EvaluatePassword(userInfo.Password);
+        if (zxcvbnResult.Score < 3) return UnprocessableEntity("Password is too weak");
         var user = new User(
             FirstName: userInfo.FirstName,
             LastName: userInfo.LastName,
@@ -37,7 +40,7 @@ public class UserController : ControllerBase
         );
         var userCreationResult = await userManager.CreateAsync(user, userInfo.Password);
         if (!userCreationResult.Succeeded)
-            return Problem(userCreationResult.Errors.First().Description, null, 422);
+            return UnprocessableEntity(userCreationResult.Errors.First());
         return Created("", (UserResponse)user);
     }
 
@@ -50,8 +53,10 @@ public class UserController : ControllerBase
 
         if (user is null)
             return NotFound($"User with email or username {loginInfo.UsernameOrEmail} does not exist");
-        if (await userManager.CheckPasswordAsync(user, loginInfo.Password))
-            return Ok();
+
+        var loginResult = await signInManager.PasswordSignInAsync(user, loginInfo.Password, false, false);
+        if (loginResult.Succeeded)
+            return Ok((UserResponse)user);
         else
             return BadRequest("Incorrect Password");
     }

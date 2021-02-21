@@ -38,12 +38,17 @@ namespace RibbleChatServer
 
             services.Configure<IdentityOptions>(options =>
             {
+                options.SignIn.RequireConfirmedAccount = false;
+                // disable identity validation and use zxcvbn
                 options.Password = new PasswordOptions
                 {
-                    RequireDigit = true,
+                    RequireDigit = false,
                     RequireUppercase = false,
                     RequireNonAlphanumeric = false,
-                    RequiredLength = 8,
+                    RequiredLength = 0,
+                    RequireLowercase = false,
+                    RequiredUniqueChars = 1,
+
                 };
 
                 options.Lockout = new LockoutOptions
