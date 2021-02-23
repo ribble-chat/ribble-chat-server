@@ -9,6 +9,9 @@ namespace RibbleChatServer.Data
 {
     public class UserDbContext : IdentityDbContext<User, Role, Guid>
     {
+
+        public DbSet<Group> Groups { get; set; } = null!;
+
         public UserDbContext([NotNullAttribute] DbContextOptions options) : base(options)
         {
 

@@ -63,7 +63,7 @@ namespace RibbleChatServer.Data
         public async Task AddMessage(ChatMessage msg)
         {
             var messages = await getMessageTable();
-            messages.Insert(msg);
+            await messages.Insert(msg).ExecuteAsync();
         }
 
         ~ChatDb() => session?.Dispose();
