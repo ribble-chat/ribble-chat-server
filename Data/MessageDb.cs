@@ -5,18 +5,18 @@ using RibbleChatServer.Models;
 
 namespace RibbleChatServer.Data
 {
-    public class ChatDb : IChatDb
+    public class MessageDb : IMessageDb
     {
         private ISession? session;
 
         private Cassandra.Data.Linq.Table<ChatMessage>? messageTable;
 
-        private readonly ILogger<ChatDb> logger;
+        private readonly ILogger<MessageDb> logger;
 
         const string KEYSPACE = "ribble";
 
 
-        public ChatDb(ILogger<ChatDb> logger)
+        public MessageDb(ILogger<MessageDb> logger)
         {
             this.logger = logger;
             Task.Run(Init);
@@ -66,7 +66,7 @@ namespace RibbleChatServer.Data
             await messages.Insert(msg).ExecuteAsync();
         }
 
-        ~ChatDb() => session?.Dispose();
+        ~MessageDb() => session?.Dispose();
     }
 }
 

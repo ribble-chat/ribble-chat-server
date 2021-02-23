@@ -2,6 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RibbleChatServer.Data;
 using RibbleChatServer.Models;
 
@@ -12,7 +13,7 @@ public class UserController : ControllerBase
     private readonly UserManager<User> userManager;
     private readonly SignInManager<User> signInManager;
 
-    public UserController(UserDbContext dbContext, UserManager<User> userManager, SignInManager<User> signInManager, IChatDb db)
+    public UserController(UserDbContext dbContext, UserManager<User> userManager, SignInManager<User> signInManager, IMessageDb db)
     {
         this.dbContext = dbContext;
         this.userManager = userManager;
@@ -21,17 +22,15 @@ public class UserController : ControllerBase
 
     [HttpGet]
     [Route("/api")]
-    public IActionResult RibbleApiRoot()
-    {
-        return Ok("Welcome to the Ribble API!");
-    }
+    public IActionResult RibbleApiRoot() => Ok("Welcome to the Ribble API!");
 
     [HttpPost]
     [Route("/api/users")]
-    public async Task<ActionResult<User>> Register([FromBody] RegisterUserInfo userInfo)
+    public async Task<ActionResult<UserResponse>> Register([FromBody] RegisterUserInfo userInfo)
     {
         var zxcvbnResult = Zxcvbn.Core.EvaluatePassword(userInfo.Password);
         if (zxcvbnResult.Score < 3) return UnprocessableEntity("Password is too weak");
+
         var user = new User(
             FirstName: userInfo.FirstName,
             LastName: userInfo.LastName,
@@ -41,12 +40,12 @@ public class UserController : ControllerBase
         var userCreationResult = await userManager.CreateAsync(user, userInfo.Password);
         if (!userCreationResult.Succeeded)
             return UnprocessableEntity(userCreationResult.Errors.First());
-        return Created("", (UserResponse)user);
+        return Created("", user);
     }
 
     [HttpPost]
     [Route("/api/auth")]
-    public async Task<IActionResult> Login(LoginUserInfo loginInfo)
+    public async Task<ActionResult<UserResponse>> Login(LoginUserInfo loginInfo)
     {
         var user = await userManager.FindByEmailAsync(loginInfo.UsernameOrEmail)
             ?? await userManager.FindByNameAsync(loginInfo.UsernameOrEmail);
@@ -55,9 +54,12 @@ public class UserController : ControllerBase
             return NotFound($"User with email or username {loginInfo.UsernameOrEmail} does not exist");
 
         var loginResult = await signInManager.PasswordSignInAsync(user, loginInfo.Password, false, false);
-        if (loginResult.Succeeded)
-            return Ok((UserResponse)user);
-        else
+        if (!loginResult.Succeeded)
             return BadRequest("Incorrect Password");
+
+        var loadedUser = await dbContext.Users
+            .Include(user => user.Groups)
+            .SingleAsync(u => u.Id == user.Id);
+        return Ok((UserResponse)loadedUser);
     }
 }

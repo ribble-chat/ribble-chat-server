@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,7 @@ namespace RibbleChatServer.Controllers
 {
 
     [ApiController]
-    public class ChatController
+    public class ChatController : ControllerBase
     {
         private readonly UserDbContext userDb;
 
@@ -25,6 +26,15 @@ namespace RibbleChatServer.Controllers
             group.Users.AddRange(userIds.Select(userId => userDb.Users.Find(userId)));
             await userDb.SaveChangesAsync();
             return (GroupResponse)group;
+        }
+
+        [HttpGet]
+        [Route("/api/chat/groups/{userId}")]
+        public async Task<ActionResult<GroupResponse[]>> GroupsForUser(Guid userId)
+        {
+            var user = await userDb.Users.FindAsync(userId);
+            if (user is null) return NotFound();
+            return Ok(user.Groups);
         }
     }
 }

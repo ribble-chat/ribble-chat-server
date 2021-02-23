@@ -24,7 +24,7 @@ namespace RibbleChatServer
         {
 
             services.AddControllers();
-            services.AddSingleton<IChatDb, ChatDb>();
+            services.AddSingleton<IMessageDb, MessageDb>();
             services.AddAuthentication();
             services.AddSignalR();
             services.AddDbContext<UserDbContext>(options =>

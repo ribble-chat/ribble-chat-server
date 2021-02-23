@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
+using RibbleChatServer.Models;
 
 namespace RibbleChatServer.Models
 {
@@ -20,7 +22,7 @@ namespace RibbleChatServer.Models
             LastName: g.LastName,
             UserName: g.UserName,
             Email: g.Email,
-            Groups: g.Groups
+            Groups: g.Groups.Select(g => (GroupResponse)g)
         );
     }
 
@@ -30,7 +32,7 @@ namespace RibbleChatServer.Models
         [property: JsonPropertyName("lastname")] string LastName,
         [property: JsonPropertyName("username")] string UserName,
         [property: JsonPropertyName("email")] string Email,
-        [property: JsonPropertyName("groups")] List<Group> Groups
+        [property: JsonPropertyName("groups")] IEnumerable<GroupResponse> Groups
     );
 
     public record RegisterUserInfo(

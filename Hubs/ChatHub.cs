@@ -9,17 +9,20 @@ namespace RibbleChatServer.Services
 {
     public class ChatHub : Hub
     {
-        private IChatDb chatDb;
+        private IMessageDb chatDb;
 
-        public ChatHub(IChatDb chatDb)
+        public ChatHub(IMessageDb chatDb)
         {
             this.chatDb = chatDb;
         }
 
-        public async Task JoinGroup(string groupId)
+        public async Task JoinGroups(string[] groupIds)
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, groupId);
-            await Clients.Group(groupId).SendAsync("joined-group", groupId, Context.ConnectionId);
+            foreach (var groupId in groupIds)
+            {
+                await Groups.AddToGroupAsync(Context.ConnectionId, groupId);
+                await Clients.Group(groupId).SendAsync("joined-group", groupId, Context.ConnectionId);
+            }
         }
 
         public async Task SendMessage(SendMessageRequest request)
