@@ -1,5 +1,7 @@
+using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using RibbleChatServer.Utils;
 
 namespace RibbleChatServer
 {
@@ -15,7 +17,8 @@ namespace RibbleChatServer
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls("http://*:5000", "https://*:5001");
+                    var port = Environment.GetEnvironmentVariable("PORT")?.Map(Int32.Parse) ?? 5000;
+                    webBuilder.UseUrls($"http://*:{port}", $"https://*:{port + 1}");
                 });
     }
 }
