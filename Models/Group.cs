@@ -23,7 +23,7 @@ namespace RibbleChatServer.Models
         public string Name { get; init; }
 
         [JsonPropertyName("userIds")]
-        public List<Guid> UserIds { get; init; } = new List<Guid>();
+        public List<Guid> UserIds { get; init; }
 
         public static explicit operator GroupResponse(Group g) => new GroupResponse(
             id: g.Id,

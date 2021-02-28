@@ -1,5 +1,6 @@
 using System;
 using RibbleChatServer.Services;
+using HotChocolate;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using GraphQL.Server;
@@ -44,8 +45,10 @@ namespace RibbleChatServer
 
             services
                 .AddScoped<ChatSchema>()
+                .AddScoped<GQLQuery>()
                 .AddScoped<GQLMessage>()
                 .AddScoped<GQLUser>()
+                .AddScoped<GQLGroup>()
                 .AddGraphQL((options, provider) =>
                 {
                     options.EnableMetrics = this.Env.IsDevelopment();
@@ -53,6 +56,8 @@ namespace RibbleChatServer
                 .AddErrorInfoProvider(opt => opt.ExposeExceptionStackTrace = true)
                 .AddSystemTextJson()
                 .AddWebSockets();
+
+            // services.AddGraphQLServer();
 
 
             services.Configure<IdentityOptions>(options =>

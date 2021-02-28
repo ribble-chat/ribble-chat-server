@@ -13,7 +13,7 @@ namespace RibbleChatServer.Models
         public User(string UserName, string Email) =>
             (this.UserName, this.Email) = (UserName, Email);
 
-        public List<Group> Groups { get; set; } = new List<Group>();
+        public List<Group> Groups { get; set; } = null!;
 
         public static explicit operator UserResponse(User g) => new UserResponse(
             Id: g.Id,

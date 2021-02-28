@@ -17,6 +17,7 @@
     <PackageReference Include="GraphQL.Server.Ui.GraphiQL" Version="4.4.1" />
     <PackageReference Include="GraphQL.Server.Ui.Playground" Version="4.4.1" />
     <PackageReference Include="GraphQL.SystemTextJson" Version="3.3.2" />
+    <PackageReference Include="HotChocolate.AspNetCore" Version="11.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="5.0.2" />
