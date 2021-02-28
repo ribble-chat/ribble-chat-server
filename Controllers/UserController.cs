@@ -32,8 +32,6 @@ public class UserController : ControllerBase
         if (zxcvbnResult.Score < 3) return UnprocessableEntity("Password is too weak");
 
         var user = new User(
-            FirstName: userInfo.FirstName,
-            LastName: userInfo.LastName,
             UserName: userInfo.Username,
             Email: userInfo.Email
         );
