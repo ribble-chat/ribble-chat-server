@@ -4,7 +4,7 @@ using RibbleChatServer.Models;
 namespace RibbleChatServer.GraphQL.ResultTypes
 {
 
-    [UnionType("LoginError")]
+    [UnionType("LoginResult")]
     public interface ILoginResult
     {
     }

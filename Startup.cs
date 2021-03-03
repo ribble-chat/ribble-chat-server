@@ -60,12 +60,14 @@ namespace RibbleChatServer
             services
                 .AddGraphQLServer()
                 .EnableRelaySupport()
-                .AddQueryType<QueryType>()
-                .AddMutationType<MutationType>()
-                // .AddSubscriptionType<SubscriptionType>()
+                .AddType<User>()
+                .AddType<Group>()
                 .AddType<LoginSuccess>()
                 .AddType<LoginUnknownUserError>()
-                .AddType<LoginIncorrectPasswordError>();
+                .AddType<LoginIncorrectPasswordError>()
+                .AddQueryType<QueryType>()
+                .AddMutationType<MutationType>();
+            // .AddSubscriptionType<SubscriptionType>()
 
 
             services.Configure<IdentityOptions>(options =>
@@ -110,7 +112,8 @@ namespace RibbleChatServer
             {
                 options.AddDefaultPolicy(builder =>
                 {
-                    builder.WithOrigins("http://localhost:3000")
+                    builder
+                        .WithOrigins("http://localhost:3000")
                         .AllowCredentials();
                 });
             });
