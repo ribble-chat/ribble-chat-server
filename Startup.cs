@@ -57,7 +57,9 @@ namespace RibbleChatServer
                 .AddSystemTextJson()
                 .AddWebSockets();
 
-            // services.AddGraphQLServer();
+            services
+                .AddGraphQLServer()
+                .AddQueryType<GQLQuery>();
 
 
             services.Configure<IdentityOptions>(options =>
@@ -124,6 +126,8 @@ namespace RibbleChatServer
             }
 
             app.UseGraphiQLServer();
+            app.UseGraphQLAltair();
+            app.UseGraphQLVoyager();
 
             // app.UseHttpsRedirection();
             app.UseWebSockets();
@@ -131,22 +135,11 @@ namespace RibbleChatServer
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            // app.UseGraphQLWebSockets("/graphql");
 
-            app.UseGraphiQLServer(new GraphiQLOptions
-            {
-                Path = "/ui/graphiql",
-                GraphQLEndPoint = "/graphql"
-            });
-            app.UseGraphQLAltair(new GraphQLAltairOptions
-            {
-                Path = "/ui/altair",
-                GraphQLEndPoint = "/graphql"
-            });
-            app.UseGraphQL<ChatSchema>("/graphql");
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapGraphQL();
                 endpoints.MapHub<ChatHub>("/chat");
             });
         }

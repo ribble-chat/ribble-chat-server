@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Json.Serialization;
+using HotChocolate;
 using Microsoft.AspNetCore.Identity;
 using RibbleChatServer.Models;
 
@@ -12,6 +13,26 @@ namespace RibbleChatServer.Models
     {
         public User(string UserName, string Email) =>
             (this.UserName, this.Email) = (UserName, Email);
+
+        [JsonIgnore]
+        [GraphQLIgnore]
+        public override string PasswordHash { get; set; } = null!;
+
+        [GraphQLIgnore]
+        [JsonIgnore]
+        public override bool EmailConfirmed { get; set; }
+
+        [JsonIgnore]
+        [GraphQLIgnore]
+        public override bool PhoneNumberConfirmed { get; set; }
+
+        [JsonIgnore]
+        [GraphQLIgnore]
+        public override string SecurityStamp { get; set; } = null!;
+
+        [JsonIgnore]
+        [GraphQLIgnore]
+        public override int AccessFailedCount { get; set; }
 
         public List<Group> Groups { get; set; } = null!;
 

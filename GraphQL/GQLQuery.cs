@@ -1,18 +1,22 @@
-using System.Collections.Generic;
-using GraphQL.Types;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using RibbleChatServer.Data;
 using RibbleChatServer.Models;
 
 namespace RibbleChatServer.GraphQL
 {
-    public class GQLQuery : ObjectGraphType
+    public class GQLQuery
     {
+
+        private UserDbContext UserDb;
         public GQLQuery(UserDbContext userDb)
         {
-            Field<ListGraphType<GQLMessage>>("messages", resolve: context => new List<ChatMessage>());
-            Field<ListGraphType<GQLUser>>("users", resolve: context => userDb.Users);
+            this.UserDb = userDb;
         }
+
+        public IQueryable<User> GetUsers() => UserDb.Users.Include(user => user.Groups);
     }
+
 }
 
 
