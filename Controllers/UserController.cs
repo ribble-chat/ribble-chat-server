@@ -45,8 +45,7 @@ public class UserController : ControllerBase
     [Route("/api/auth")]
     public async Task<ActionResult<UserResponse>> Login(LoginUserInfo loginInfo)
     {
-        var user = await userManager.FindByEmailAsync(loginInfo.UsernameOrEmail)
-            ?? await userManager.FindByNameAsync(loginInfo.UsernameOrEmail);
+        var user = await userManager.FindByEmailAsync(loginInfo.UsernameOrEmail) ?? await userManager.FindByNameAsync(loginInfo.UsernameOrEmail);
 
         if (user is null)
             return NotFound($"User with email or username {loginInfo.UsernameOrEmail} does not exist");

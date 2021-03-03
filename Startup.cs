@@ -1,9 +1,9 @@
 using System;
 using RibbleChatServer.Services;
+using RibbleChatServer.GraphQL.ResultTypes;
 using HotChocolate;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using GraphQL.Server;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -13,8 +13,6 @@ using RibbleChatServer.Data;
 using Microsoft.AspNetCore.Identity;
 using RibbleChatServer.Models;
 using RibbleChatServer.GraphQL;
-using GraphQL.Server.Ui.GraphiQL;
-using GraphQL.Server.Ui.Altair;
 
 namespace RibbleChatServer
 {
@@ -58,10 +56,16 @@ namespace RibbleChatServer
             //     .AddWebSockets();
 
             services.AddScoped<Query>();
+            services.AddScoped<Mutation>();
             services
                 .AddGraphQLServer()
                 .EnableRelaySupport()
-                .AddQueryType<QueryType>();
+                .AddQueryType<QueryType>()
+                .AddMutationType<MutationType>()
+                // .AddSubscriptionType<SubscriptionType>()
+                .AddType<LoginSuccess>()
+                .AddType<LoginUnknownUserError>()
+                .AddType<LoginIncorrectPasswordError>();
 
 
             services.Configure<IdentityOptions>(options =>
@@ -92,8 +96,6 @@ namespace RibbleChatServer
                         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+",
                     RequireUniqueEmail = true,
                 };
-
-
             });
 
             services.ConfigureApplicationCookie(options =>
