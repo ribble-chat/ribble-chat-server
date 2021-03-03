@@ -9,12 +9,11 @@ namespace RibbleChatServer.GraphQL
 
         protected override void Configure(IObjectTypeDescriptor<Group> descriptor)
         {
-            base.Configure(descriptor);
             descriptor
                 .ImplementsNode()
                 .IdField(group => group.Id)
                 .ResolveNode(async (ctx, id) =>
-                    await ctx.Service<UserDbContext>().Groups.FindAsync(id));
+                    await ctx.Service<MainDbContext>().Groups.FindAsync(id));
         }
     }
 }

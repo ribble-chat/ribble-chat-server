@@ -14,11 +14,14 @@ namespace RibbleChatServer.GraphQL
             // does the type even matter?
             descriptor
                 .Field(query => query.Users)
+                .UsePaging<UserType>()
                 .Type<NonNullType<ListType<NonNullType<UserType>>>>();
 
             descriptor
                 .Field(query => query.Groups)
+                .UsePaging<GroupType>()
                 .Type<NonNullType<ListType<NonNullType<GroupType>>>>();
+
 
         }
 
@@ -27,8 +30,8 @@ namespace RibbleChatServer.GraphQL
     public class Query
     {
 
-        private UserDbContext UserDb;
-        public Query(UserDbContext userDb)
+        private MainDbContext UserDb;
+        public Query(MainDbContext userDb)
         {
             this.UserDb = userDb;
         }

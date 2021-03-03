@@ -11,9 +11,9 @@ namespace RibbleChatServer.Controllers
     [ApiController]
     public class ChatController : ControllerBase
     {
-        private readonly UserDbContext userDb;
+        private readonly MainDbContext userDb;
 
-        public ChatController(UserDbContext userDb) => this.userDb = userDb;
+        public ChatController(MainDbContext userDb) => this.userDb = userDb;
 
         [HttpPost]
         [Route("/api/chat/groups")]

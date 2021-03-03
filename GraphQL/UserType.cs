@@ -12,7 +12,7 @@ namespace RibbleChatServer.GraphQL
                 .ImplementsNode()
                 .IdField(user => user.Id)
                 .ResolveNode(async (context, id) =>
-                    await context.Service<UserDbContext>().Users.FindAsync(id));
+                    await context.Service<MainDbContext>().Users.FindAsync(id));
         }
     }
 }

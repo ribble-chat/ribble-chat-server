@@ -9,7 +9,7 @@ using RibbleChatServer.Data;
 
 namespace RibbleChatServer.Migrations
 {
-    [DbContext(typeof(UserDbContext))]
+    [DbContext(typeof(MainDbContext))]
     [Migration("20210221041814_Init")]
     partial class Init
     {

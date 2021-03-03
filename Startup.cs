@@ -34,13 +34,13 @@ namespace RibbleChatServer
             services.AddAuthentication();
             services.AddSignalR();
             services
-                .AddDbContext<UserDbContext>(options => options
+                .AddDbContext<MainDbContext>(options => options
                 .UseNpgsql(Configuration.GetConnectionString("ChatDbContext"))
                 .UseSnakeCaseNamingConvention());
 
             services
                 .AddIdentity<User, Role>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<UserDbContext>()
+                .AddEntityFrameworkStores<MainDbContext>()
                 .AddDefaultTokenProviders();
 
             // services

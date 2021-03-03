@@ -9,11 +9,11 @@ using RibbleChatServer.Models;
 [ApiController]
 public class UserController : ControllerBase
 {
-    private readonly UserDbContext dbContext;
+    private readonly MainDbContext dbContext;
     private readonly UserManager<User> userManager;
     private readonly SignInManager<User> signInManager;
 
-    public UserController(UserDbContext dbContext, UserManager<User> userManager, SignInManager<User> signInManager, IMessageDb db)
+    public UserController(MainDbContext dbContext, UserManager<User> userManager, SignInManager<User> signInManager, IMessageDb db)
     {
         this.dbContext = dbContext;
         this.userManager = userManager;
