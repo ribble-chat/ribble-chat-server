@@ -1,15 +1,20 @@
-using GraphQL.Types;
+using HotChocolate.Types;
+using RibbleChatServer.Data;
 using RibbleChatServer.Models;
 
 namespace RibbleChatServer.GraphQL
 {
-    public class GQLGroup : ObjectGraphType<Group>
+    public class GroupType : ObjectType<Group>
     {
-        public GQLGroup()
+
+        protected override void Configure(IObjectTypeDescriptor<Group> descriptor)
         {
-            Field(group => group.Id);
-            Field(group => group.Name);
-            Field(group => group.Users, type: typeof(UserType));
+            base.Configure(descriptor);
+            descriptor
+                .ImplementsNode()
+                .IdField(group => group.Id)
+                .ResolveNode(async (ctx, id) =>
+                    await ctx.Service<UserDbContext>().Groups.FindAsync(id));
         }
     }
 }

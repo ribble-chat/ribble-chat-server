@@ -11,9 +11,15 @@ namespace RibbleChatServer.GraphQL
         protected override void Configure(IObjectTypeDescriptor<Query> descriptor)
         {
             // https://github.com/ChilliCream/hotchocolate-docs/blob/master/docs/schema-object-type.md
+            // does the type even matter?
             descriptor
-                .Field(query => query.GetUsers())
+                .Field(query => query.Users)
                 .Type<NonNullType<ListType<NonNullType<UserType>>>>();
+
+            descriptor
+                .Field(query => query.Groups)
+                .Type<NonNullType<ListType<NonNullType<GroupType>>>>();
+
         }
 
     }
@@ -27,7 +33,8 @@ namespace RibbleChatServer.GraphQL
             this.UserDb = userDb;
         }
 
-        public IQueryable<User> GetUsers() => UserDb.Users.Include(user => user.Groups);
+        public IQueryable<User> Users => UserDb.Users.Include(user => user.Groups);
+        public IQueryable<Group> Groups => UserDb.Groups.Include(group => group.Users);
     }
 
 
