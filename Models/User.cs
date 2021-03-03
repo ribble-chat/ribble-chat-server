@@ -5,11 +5,9 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using HotChocolate;
 using Microsoft.AspNetCore.Identity;
-using RibbleChatServer.Models;
-
 namespace RibbleChatServer.Models
 {
-    public class User : IdentityUser<Guid>
+    public partial class User : IdentityUser<Guid>
     {
         public User(string UserName, string Email) =>
             (this.UserName, this.Email) = (UserName, Email);

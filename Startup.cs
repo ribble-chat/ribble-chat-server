@@ -43,23 +43,25 @@ namespace RibbleChatServer
                 .AddEntityFrameworkStores<UserDbContext>()
                 .AddDefaultTokenProviders();
 
-            services
-                .AddScoped<ChatSchema>()
-                .AddScoped<GQLQuery>()
-                .AddScoped<GQLMessage>()
-                .AddScoped<GQLUser>()
-                .AddScoped<GQLGroup>()
-                .AddGraphQL((options, provider) =>
-                {
-                    options.EnableMetrics = this.Env.IsDevelopment();
-                })
-                .AddErrorInfoProvider(opt => opt.ExposeExceptionStackTrace = true)
-                .AddSystemTextJson()
-                .AddWebSockets();
+            // services
+            //     .AddScoped<ChatSchema>()
+            //     .AddScoped<Query>()
+            //     .AddScoped<GQLMessage>()
+            //     .AddScoped<User>()
+            //     .AddScoped<GQLGroup>()
+            //     .AddGraphQL((options, provider) =>
+            //     {
+            //         options.EnableMetrics = this.Env.IsDevelopment();
+            //     })
+            //     .AddErrorInfoProvider(opt => opt.ExposeExceptionStackTrace = true)
+            //     .AddSystemTextJson()
+            //     .AddWebSockets();
 
+            services.AddScoped<Query>();
             services
                 .AddGraphQLServer()
-                .AddQueryType<GQLQuery>();
+                .EnableRelaySupport()
+                .AddQueryType<QueryType>();
 
 
             services.Configure<IdentityOptions>(options =>
@@ -128,6 +130,7 @@ namespace RibbleChatServer
             app.UseGraphiQLServer();
             app.UseGraphQLAltair();
             app.UseGraphQLVoyager();
+            app.UseGraphQLPlayground();
 
             // app.UseHttpsRedirection();
             app.UseWebSockets();

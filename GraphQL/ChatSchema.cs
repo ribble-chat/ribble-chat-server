@@ -6,7 +6,7 @@ namespace RibbleChatServer.GraphQL
     public class ChatSchema : Schema
     {
 
-        public ChatSchema(IServiceProvider provider, GQLQuery query) : base(provider)
+        public ChatSchema(IServiceProvider provider, Query query) : base(provider)
         {
             // Query = query;
             // Mutation = new ChatMutation();

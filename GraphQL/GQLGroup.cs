@@ -9,7 +9,7 @@ namespace RibbleChatServer.GraphQL
         {
             Field(group => group.Id);
             Field(group => group.Name);
-            Field(group => group.Users, type: typeof(GQLUser));
+            Field(group => group.Users, type: typeof(UserType));
         }
     }
 }
