@@ -18,6 +18,8 @@
     <PackageReference Include="GraphQL.Server.Ui.Voyager" Version="4.4.1" />
     <PackageReference Include="GraphQL.SystemTextJson" Version="3.3.2" />
     <PackageReference Include="HotChocolate.AspNetCore" Version="11.0.9" />
+    <PackageReference Include="HotChocolate.AspNetCore.Playground" Version="10.5.5" />
+    <PackageReference Include="HotChocolate.Data.EntityFramework" Version="11.0.9" />
     <PackageReference Include="HotChocolate.Subscriptions" Version="11.0.9" />
     <PackageReference Include="HotChocolate.Subscriptions.Redis" Version="11.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.2" />

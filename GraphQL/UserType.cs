@@ -9,6 +9,7 @@ namespace RibbleChatServer.GraphQL
         protected override void Configure(IObjectTypeDescriptor<User> descriptor)
         {
             base.Configure(descriptor);
+            descriptor.Field(group => group.Id).Type<NonNullType<UuidType>>();
             descriptor
                 .ImplementsNode()
                 .IdField(user => user.Id)

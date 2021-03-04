@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using HotChocolate;
 using HotChocolate.Subscriptions;
+using HotChocolate.Types.Relay;
 using RibbleChatServer.Data;
 using RibbleChatServer.Models;
 
@@ -40,17 +43,47 @@ namespace RibbleChatServer.GraphQL
             return new SendMessagePayload(message);
         }
 
-        public record TestMutationInput(int x);
-        public record TestMutationPayload(int y);
+        public record JoinGroupInput(Guid GroupId, Guid UserId);
+        public record JoinGroupPayload(Group Group);
 
-        public async Task<TestMutationPayload> TestMutation(
-            TestMutationInput input,
+        public async Task<JoinGroupPayload> JoinGroup(
+            JoinGroupInput input,
+            [ScopedService] MainDbContext db,
             [Service] ITopicEventSender eventSender
         )
         {
-            await eventSender.SendAsync(new Topic.Test(), input.x);
-            return new TestMutationPayload(input.x);
+            var (groupId, userId) = input;
+            var group = await db.Groups.FindAsync(groupId);
+            var user = await db.Users.FindAsync(userId);
+            group.Users.Add(user);
+            await db.AddAsync(group);
+            await db.SaveChangesAsync();
+            return new JoinGroupPayload(group);
         }
+
+        public record CreateGroupInput(
+            string GroupName,
+            [ID] List<Guid> UserIds
+        );
+
+        public record CreateGroupPayload(Group Group);
+
+        public async Task<CreateGroupPayload> CreateGroup(
+            CreateGroupInput input,
+            [Service] MainDbContext db,
+            [Service] ITopicEventSender eventSender
+        )
+        {
+            var (groupName, userIds) = input;
+            var newGroup = new Group(groupName);
+            newGroup.Users.AddRange(userIds.Select(userId => db.Users.Find(userId)));
+            var entry = await db.AddAsync(newGroup);
+            await db.SaveChangesAsync();
+            return new CreateGroupPayload(entry.Entity);
+        }
+
+
+
 
     }
 }

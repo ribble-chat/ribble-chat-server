@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using HotChocolate;
+using HotChocolate.Subscriptions;
 using HotChocolate.Types;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +38,17 @@ namespace RibbleChatServer.GraphQL
                 .SingleAsync(u => u.Id == user.Id);
             return new LoginSuccess(loadedUser);
 
+        }
+        public record TestMutationInput(int x);
+        public record TestMutationPayload(int y);
+
+        public async Task<TestMutationPayload> TestMutation(
+            TestMutationInput input,
+            [Service] ITopicEventSender eventSender
+        )
+        {
+            await eventSender.SendAsync(new Topic.Test(), input.x);
+            return new TestMutationPayload(input.x);
         }
     }
 }

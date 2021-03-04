@@ -14,6 +14,8 @@ using RibbleChatServer.Data;
 using Microsoft.AspNetCore.Identity;
 using RibbleChatServer.Models;
 using RibbleChatServer.GraphQL;
+using HotChocolate.Types;
+using HotChocolate.AspNetCore;
 
 namespace RibbleChatServer
 {
@@ -51,8 +53,9 @@ namespace RibbleChatServer
             services
                 .AddGraphQLServer()
                 .EnableRelaySupport()
-                .AddType<User>()
-                .AddType<Group>()
+                .AddType(new UuidType(defaultFormat: 'B'))
+                .AddType<UserType>()
+                .AddType<GroupType>()
                 .AddType<LoginSuccess>()
                 .AddType<LoginUnknownUserError>()
                 .AddType<LoginIncorrectPasswordError>()
@@ -133,7 +136,7 @@ namespace RibbleChatServer
             app.UseGraphiQLServer();
             app.UseGraphQLAltair();
             app.UseGraphQLVoyager();
-            app.UseGraphQLPlayground();
+            app.UsePlayground();
 
             app.UseEndpoints(endpoints =>
             {

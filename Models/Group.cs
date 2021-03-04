@@ -4,6 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
+using HotChocolate.Types.Relay;
+using RibbleChatServer.Data;
 
 namespace RibbleChatServer.Models
 {
@@ -32,9 +35,13 @@ namespace RibbleChatServer.Models
         );
     }
 
+    [Node]
     public record Group
     {
         public Group(string name) => Name = name;
+
+        public static async ValueTask<Group> GetGroupAsync(MainDbContext db, Guid id) =>
+            await db.Groups.FindAsync(id);
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
