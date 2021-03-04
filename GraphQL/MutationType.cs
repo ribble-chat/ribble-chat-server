@@ -19,9 +19,9 @@ namespace RibbleChatServer.GraphQL
         public async Task<ILoginResult> Login(
             string usernameOrEmail,
             string password,
-            [ScopedService] UserManager<User> userManager,
-            [ScopedService] SignInManager<User> signinManager,
-            [ScopedService] MainDbContext dbContext)
+            [Service] UserManager<User> userManager,
+            [Service] SignInManager<User> signinManager,
+            [Service] MainDbContext dbContext)
         {
 
             var user = await userManager.FindByEmailAsync(usernameOrEmail)

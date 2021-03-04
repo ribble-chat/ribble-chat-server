@@ -17,7 +17,7 @@ namespace RibbleChatServer.GraphQL
             string Content
         );
 
-        public record SendMessagePayload(int todo);
+        public record SendMessagePayload(ChatMessage message);
 
         public async Task<SendMessagePayload> SendMessage(
             SendMessageInput input,
@@ -37,7 +37,7 @@ namespace RibbleChatServer.GraphQL
             );
             await eventSender.SendAsync(new Topic.NewMessage(groupId), message);
             await messageDb.AddMessage(message);
-            return new SendMessagePayload(3);
+            return new SendMessagePayload(message);
         }
 
         public record TestMutationInput(int x);
