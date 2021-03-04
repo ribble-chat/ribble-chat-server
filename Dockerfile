@@ -9,8 +9,6 @@ ENV PATH="/root/.dotnet/tools:${PATH}"
 
 COPY * ./
 
-RUN dotnet build
-
 # RUN dotnet publish -c Release -o out
 # RUN dotnet publish -o out
 

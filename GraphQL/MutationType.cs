@@ -13,14 +13,15 @@ namespace RibbleChatServer.GraphQL
     {
     }
 
-    public class Mutation
+    public partial class Mutation
     {
+
         public async Task<ILoginResult> Login(
             string usernameOrEmail,
             string password,
-            [Service] UserManager<User> userManager,
-            [Service] SignInManager<User> signinManager,
-            [Service] MainDbContext dbContext)
+            [ScopedService] UserManager<User> userManager,
+            [ScopedService] SignInManager<User> signinManager,
+            [ScopedService] MainDbContext dbContext)
         {
 
             var user = await userManager.FindByEmailAsync(usernameOrEmail)

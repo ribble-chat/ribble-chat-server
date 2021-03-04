@@ -1,19 +1,22 @@
 using System;
 using HotChocolate.Types;
-using HotChocolate.Subscriptions.InMemory;
+using HotChocolate;
+using System.Threading.Tasks;
+using HotChocolate.Execution;
+using HotChocolate.Subscriptions;
 
 namespace RibbleChatServer.GraphQL
 {
     public class SubscriptionType : ObjectType<Subscription>
     {
-        protected override void Configure(IObjectTypeDescriptor<Subscription> descriptor)
-        {
-            descriptor.Field(s => s.Test());
-        }
     }
 
     public class Subscription
     {
-        public int Test() { return 0;}
+        [SubscribeAndResolve]
+        public async ValueTask<ISourceStream<int>> OnTestEvent(
+            int groupId,
+            [Service] ITopicEventReceiver eventReceiver
+        ) => await eventReceiver.SubscribeAsync<string, int>("test-event");
     }
 }

@@ -57,7 +57,6 @@ namespace RibbleChatServer
             //     .AddWebSockets();
 
             services.AddRedisSubscriptions(_ => ConnectionMultiplexer.Connect("ribble-redis"));
-            System.Console.WriteLine(connection.IsConnected);
 
             services.AddScoped<Query>();
             services.AddScoped<Mutation>();
@@ -136,17 +135,17 @@ namespace RibbleChatServer
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "RibbleChatServer v1"));
             }
 
-            app.UseGraphiQLServer();
-            app.UseGraphQLAltair();
-            app.UseGraphQLVoyager();
-            app.UseGraphQLPlayground();
-
             // app.UseHttpsRedirection();
             app.UseWebSockets();
             app.UseCors();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseGraphiQLServer();
+            app.UseGraphQLAltair();
+            app.UseGraphQLVoyager();
+            app.UseGraphQLPlayground();
 
             app.UseEndpoints(endpoints =>
             {
