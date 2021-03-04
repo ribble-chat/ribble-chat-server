@@ -1,5 +1,6 @@
 using System;
 using HotChocolate.Types;
+using HotChocolate.Subscriptions.InMemory;
 
 namespace RibbleChatServer.GraphQL
 {
@@ -7,9 +8,12 @@ namespace RibbleChatServer.GraphQL
     {
         protected override void Configure(IObjectTypeDescriptor<Subscription> descriptor)
         {
-            descriptor.Field("hello");
+            descriptor.Field(s => s.Test());
         }
     }
 
-    public class Subscription { }
+    public class Subscription
+    {
+        public int Test() { return 0;}
+    }
 }

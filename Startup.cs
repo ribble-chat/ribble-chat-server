@@ -2,6 +2,7 @@ using System;
 using RibbleChatServer.Services;
 using RibbleChatServer.GraphQL.ResultTypes;
 using HotChocolate;
+using StackExchange.Redis;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -37,7 +38,7 @@ namespace RibbleChatServer
                 .UseSnakeCaseNamingConvention());
 
             services
-                .AddIdentity<User, Role>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddIdentity<User, Models.Role>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<MainDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -55,6 +56,9 @@ namespace RibbleChatServer
             //     .AddSystemTextJson()
             //     .AddWebSockets();
 
+            services.AddRedisSubscriptions(_ => ConnectionMultiplexer.Connect("ribble-redis"));
+            System.Console.WriteLine(connection.IsConnected);
+
             services.AddScoped<Query>();
             services.AddScoped<Mutation>();
             services
@@ -66,8 +70,8 @@ namespace RibbleChatServer
                 .AddType<LoginUnknownUserError>()
                 .AddType<LoginIncorrectPasswordError>()
                 .AddQueryType<QueryType>()
-                .AddMutationType<MutationType>();
-            // .AddSubscriptionType<SubscriptionType>()
+                .AddMutationType<MutationType>()
+                .AddSubscriptionType<SubscriptionType>();
 
 
             services.Configure<IdentityOptions>(options =>

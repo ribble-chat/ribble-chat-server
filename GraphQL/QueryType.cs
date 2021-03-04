@@ -13,12 +13,14 @@ namespace RibbleChatServer.GraphQL
             // https://github.com/ChilliCream/hotchocolate-docs/blob/master/docs/schema-object-type.md
             // does the type even matter?
             descriptor
-                .Field(query => query.Users);
-            // .UsePaging<UserType>();
+                .Field(query => query.Users)
+                .Type<NonNullType<ListType<NonNullType<UserType>>>>();
+            // .UsePaging<NonNull<UserType>>();
 
             descriptor
-                .Field(query => query.Groups);
-            // .UsePaging<GroupType>();
+                .Field(query => query.Groups)
+                .Type<NonNullType<ListType<NonNullType<GroupType>>>>();
+            // .UsePaging<NonNull<GroupType>>();
 
 
         }
