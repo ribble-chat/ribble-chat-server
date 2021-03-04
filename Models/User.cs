@@ -7,10 +7,15 @@ using HotChocolate;
 using Microsoft.AspNetCore.Identity;
 namespace RibbleChatServer.Models
 {
+    // we override a bunch of fields either to hide them or to enforce non-nullability
     public partial class User : IdentityUser<Guid>
     {
         public User(string UserName, string Email) =>
             (this.UserName, this.Email) = (UserName, Email);
+
+        public override string UserName { get; set; } = null!;
+        public override string Email { get; set; } = null!;
+        public override string ConcurrencyStamp { get; set; } = null!;
 
         [JsonIgnore]
         [GraphQLIgnore]
@@ -27,6 +32,16 @@ namespace RibbleChatServer.Models
         [JsonIgnore]
         [GraphQLIgnore]
         public override string SecurityStamp { get; set; } = null!;
+
+        [JsonIgnore]
+        [GraphQLIgnore]
+        public override string NormalizedUserName { get; set; } = null!;
+
+        [JsonIgnore]
+        [GraphQLIgnore]
+        public override string NormalizedEmail { get; set; } = null!;
+
+        public override string? PhoneNumber { get; set; }
 
         [JsonIgnore]
         [GraphQLIgnore]
