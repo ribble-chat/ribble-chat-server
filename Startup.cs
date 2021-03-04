@@ -29,7 +29,9 @@ namespace RibbleChatServer
         {
 
             services.AddControllers();
-            services.AddScoped<IMessageDb, MessageDb>();
+
+            // Cassandra is thread-safe I think
+            services.AddSingleton<IMessageDb, MessageDb>();
             services.AddAuthentication();
             services.AddSignalR();
             services
@@ -41,20 +43,6 @@ namespace RibbleChatServer
                 .AddIdentity<User, Models.Role>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<MainDbContext>()
                 .AddDefaultTokenProviders();
-
-            // services
-            //     .AddScoped<ChatSchema>()
-            //     .AddScoped<Query>()
-            //     .AddScoped<GQLMessage>()
-            //     .AddScoped<User>()
-            //     .AddScoped<GQLGroup>()
-            //     .AddGraphQL((options, provider) =>
-            //     {
-            //         options.EnableMetrics = this.Env.IsDevelopment();
-            //     })
-            //     .AddErrorInfoProvider(opt => opt.ExposeExceptionStackTrace = true)
-            //     .AddSystemTextJson()
-            //     .AddWebSockets();
 
             services.AddRedisSubscriptions(_ => ConnectionMultiplexer.Connect("ribble-redis"));
 

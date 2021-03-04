@@ -1,24 +1,42 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using HotChocolate;
 using HotChocolate.Subscriptions;
 using RibbleChatServer.Data;
+using RibbleChatServer.Models;
 
 namespace RibbleChatServer.GraphQL
 {
     public partial class Mutation
     {
+        public record SendMessageInput(
+            Guid AuthorId,
+            Guid GroupId,
+            string AuthorUsername,
+            string Content
+        );
 
-        public record SendMessageInput(int todo);
         public record SendMessagePayload(int todo);
 
         public async Task<SendMessagePayload> SendMessage(
             SendMessageInput input,
             [ScopedService] MainDbContext dbContext,
+            [Service] MessageDb messageDb,
             [Service] ITopicEventSender eventSender
         )
         {
-            await eventSender.SendAsync("new-message", 1);
+            var (authorId, groupId, authorName, content) = input;
+            var message = new ChatMessage(
+                MessageId: Guid.NewGuid(),
+                Timestamp: DateTimeOffset.UtcNow,
+                GroupId: groupId,
+                AuthorId: authorId,
+                AuthorName: authorName,
+                Content: content
+            );
+            await eventSender.SendAsync(new Topic.NewMessage(groupId), message);
+            await messageDb.AddMessage(message);
             return new SendMessagePayload(3);
         }
 
@@ -30,8 +48,8 @@ namespace RibbleChatServer.GraphQL
             [Service] ITopicEventSender eventSender
         )
         {
-            await eventSender.SendAsync("test-event", input.x);
-            return new TestMutationPayload(input.x + 1);
+            await eventSender.SendAsync(new Topic.Test(), input.x);
+            return new TestMutationPayload(input.x);
         }
 
     }

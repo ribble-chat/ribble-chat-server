@@ -15,8 +15,7 @@ namespace RibbleChatServer.GraphQL
     {
         [SubscribeAndResolve]
         public async ValueTask<ISourceStream<int>> OnTestEvent(
-            int groupId,
             [Service] ITopicEventReceiver eventReceiver
-        ) => await eventReceiver.SubscribeAsync<string, int>("test-event");
+        ) => await eventReceiver.SubscribeAsync<Topic, int>(new Topic.Test());
     }
 }
