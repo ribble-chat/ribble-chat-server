@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using HotChocolate;
 using HotChocolate.Subscriptions;
@@ -37,8 +39,40 @@ namespace RibbleChatServer.GraphQL
                 .Include(user => user.Groups)
                 .SingleAsync(u => u.Id == user.Id);
             return new LoginSuccess(loadedUser);
+        }
+
+
+        public record RegisterMutationInput(
+            string Username,
+            string Email,
+            string Password
+        );
+
+        public record RegisterMutationPayload(User user);
+
+        public async Task<RegisterMutationPayload> Register(
+            RegisterMutationInput input,
+            [Service] UserManager<User> userManager
+        )
+        {
+            var (username, email, password) = input;
+            var zxcvbnResult = Zxcvbn.Core.EvaluatePassword(password);
+            if (zxcvbnResult.Score < 3)
+                throw new RequestException("Password is too weak");
+
+            var user = new User(
+                UserName: username,
+                Email: email
+            );
+            var userCreationResult = await userManager.CreateAsync(user, password);
+            if (!userCreationResult.Succeeded) throw new Exception(
+                userCreationResult.Errors.First().Description
+            );
+            // TODO does this user have its fields properly populated
+            return new RegisterMutationPayload(user);
 
         }
+
         public record TestMutationInput(int x);
         public record TestMutationPayload(int y);
 

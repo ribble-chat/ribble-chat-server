@@ -15,7 +15,6 @@ namespace RibbleChatServer.Models
 
         public override string UserName { get; set; } = null!;
         public override string Email { get; set; } = null!;
-        public override string ConcurrencyStamp { get; set; } = null!;
 
         [JsonIgnore]
         [GraphQLIgnore]

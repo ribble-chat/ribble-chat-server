@@ -61,7 +61,8 @@ namespace RibbleChatServer
                 .AddType<LoginIncorrectPasswordError>()
                 .AddQueryType<QueryType>()
                 .AddMutationType<MutationType>()
-                .AddSubscriptionType<SubscriptionType>();
+                .AddSubscriptionType<SubscriptionType>()
+                .AddErrorFilter<GraphQLErrorFilter>();
 
 
             services.Configure<IdentityOptions>(options =>
