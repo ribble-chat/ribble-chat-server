@@ -7,7 +7,7 @@ namespace RibbleChatServer.GraphQL
     {
         public GQLMessage()
         {
-            Field(msg => msg.AuthorName);
+            Field(msg => msg.AuthorUsername);
             Field(msg => msg.Content);
             Field(msg => msg.AuthorId);
             Field(msg => msg.Timestamp);

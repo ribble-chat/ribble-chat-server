@@ -14,8 +14,8 @@ namespace RibbleChatServer.GraphQL
     public partial class Mutation
     {
         public record SendMessageInput(
-            Guid AuthorId,
-            Guid GroupId,
+            [ID] Guid AuthorId,
+            [ID] Guid GroupId,
             string AuthorUsername,
             string Content
         );
@@ -24,8 +24,7 @@ namespace RibbleChatServer.GraphQL
 
         public async Task<SendMessagePayload> SendMessage(
             SendMessageInput input,
-            [ScopedService] MainDbContext dbContext,
-            [Service] MessageDb messageDb,
+            [Service] IMessageDb messageDb,
             [Service] ITopicEventSender eventSender
         )
         {
@@ -35,7 +34,7 @@ namespace RibbleChatServer.GraphQL
                 Timestamp: DateTimeOffset.UtcNow,
                 GroupId: groupId,
                 AuthorId: authorId,
-                AuthorName: authorName,
+                AuthorUsername: authorName,
                 Content: content
             );
             await eventSender.SendAsync(new Topic.NewMessage(groupId), message);
@@ -71,19 +70,19 @@ namespace RibbleChatServer.GraphQL
         public async Task<CreateGroupPayload> CreateGroup(
             CreateGroupInput input,
             [Service] MainDbContext db,
-            [Service] ITopicEventSender eventSender
+            [Service] ITopicEventSender eventSender,
+            CancellationToken ct
         )
         {
             var (groupName, userIds) = input;
+            var users = userIds.Select(userId =>
+                db.Users.Find(userId)
+                ?? throw new RequestException($"user with id `{userId}` does not exist"));
             var newGroup = new Group(groupName);
-            newGroup.Users.AddRange(userIds.Select(userId => db.Users.Find(userId)));
-            var entry = await db.AddAsync(newGroup);
-            await db.SaveChangesAsync();
+            newGroup.Users.AddRange(users);
+            var entry = await db.AddAsync(newGroup, ct);
+            await db.SaveChangesAsync(ct);
             return new CreateGroupPayload(entry.Entity);
         }
-
-
-
-
     }
 }

@@ -33,7 +33,7 @@ namespace RibbleChatServer.Services
                 Timestamp: DateTimeOffset.UtcNow,
                 GroupId: groupId,
                 AuthorId: authorId,
-                AuthorName: authorName,
+                AuthorUsername: authorName,
                 Content: content
             );
             await Clients.Group(groupId.ToString())

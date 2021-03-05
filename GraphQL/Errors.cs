@@ -1,5 +1,6 @@
 using System;
 using HotChocolate;
+using RibbleChatServer.Utils;
 
 namespace RibbleChatServer.GraphQL
 {
@@ -20,7 +21,9 @@ namespace RibbleChatServer.GraphQL
 
     public class GraphQLErrorFilter : IErrorFilter
     {
-        public IError OnError(IError error) =>
-            error.WithMessage(error?.Exception?.Message ?? "Unknown Error Occurred");
+        public IError OnError(IError error)
+        {
+            return error.Exception?.Message.Map(error.WithMessage) ?? error;
+        }
     }
 }

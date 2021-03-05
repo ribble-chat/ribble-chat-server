@@ -62,7 +62,8 @@ namespace RibbleChatServer
                 .AddQueryType<QueryType>()
                 .AddMutationType<MutationType>()
                 .AddSubscriptionType<SubscriptionType>()
-                .AddErrorFilter<GraphQLErrorFilter>();
+                .AddErrorFilter<GraphQLErrorFilter>()
+                .AddFiltering();
 
 
             services.Configure<IdentityOptions>(options =>

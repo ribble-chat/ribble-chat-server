@@ -15,7 +15,6 @@ namespace RibbleChatServer.Data
 
         const string KEYSPACE = "ribble";
 
-
         public MessageDb(ILogger<MessageDb> logger)
         {
             this.logger = logger;
