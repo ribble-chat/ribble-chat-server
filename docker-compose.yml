@@ -21,7 +21,8 @@ services:
       - "5432:5432"
   # I know its not actually scylla yet but anyway...
   ribble-scylla:
-    image: "cassandra"
+    # image: "cassandra"
+    image: "scylladb/scylla"
     container_name: "ribble-scylla"
     ports:
       - "7000:7000"
