@@ -3,18 +3,28 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 using HotChocolate;
+using HotChocolate.Types.Relay;
 using Microsoft.AspNetCore.Identity;
+using RibbleChatServer.Data;
+
 namespace RibbleChatServer.Models
 {
     // we override a bunch of fields either to hide them or to enforce non-nullability
+    [Node]
     public partial class User : IdentityUser<Guid>
     {
+        public static async ValueTask<User> GetUserAsync(MainDbContext db, Guid id) =>
+            await db.Users.FindAsync(id);
+
         public User(string UserName, string Email) =>
             (this.UserName, this.Email) = (UserName, Email);
 
+        public override Guid Id { get; set; }
         public override string UserName { get; set; } = null!;
         public override string Email { get; set; } = null!;
+
 
         [JsonIgnore]
         [GraphQLIgnore]

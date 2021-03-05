@@ -3,6 +3,9 @@ WORKDIR /ribble-server
 
 COPY *.csproj ./
 
+RUN apt-get update
+RUN apt-get upgrade -y
+
 RUN dotnet restore
 RUN dotnet tool install --global dotnet-ef
 ENV PATH="/root/.dotnet/tools:${PATH}"

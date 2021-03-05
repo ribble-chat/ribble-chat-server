@@ -6,6 +6,7 @@ using HotChocolate.Execution;
 using HotChocolate.Subscriptions;
 using RibbleChatServer.Models;
 using System.Threading;
+using HotChocolate.Types.Relay;
 
 namespace RibbleChatServer.GraphQL
 {
@@ -24,7 +25,7 @@ namespace RibbleChatServer.GraphQL
         [SubscribeAndResolve]
         public async ValueTask<ISourceStream<ChatMessage>> OnMessageSent(
             [Service] ITopicEventReceiver eventReceiver,
-            Guid groupId,
+            [ID] Guid groupId,
             CancellationToken ct
         ) => await eventReceiver.SubscribeAsync<Topic, ChatMessage>(new Topic.NewMessage(groupId), ct);
     }

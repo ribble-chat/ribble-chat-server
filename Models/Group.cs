@@ -38,10 +38,10 @@ namespace RibbleChatServer.Models
     [Node]
     public record Group
     {
-        public Group(string name) => Name = name;
-
         public static async ValueTask<Group> GetGroupAsync(MainDbContext db, Guid id) =>
             await db.Groups.FindAsync(id);
+
+        public Group(string name) => Name = name;
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

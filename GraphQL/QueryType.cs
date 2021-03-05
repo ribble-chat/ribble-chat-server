@@ -1,5 +1,7 @@
+using System;
 using System.Linq;
 using HotChocolate.Data;
+using HotChocolate.Data.Filters;
 using HotChocolate.Types;
 using Microsoft.EntityFrameworkCore;
 using RibbleChatServer.Data;
@@ -13,14 +15,14 @@ namespace RibbleChatServer.GraphQL
         {
             // https://github.com/ChilliCream/hotchocolate-docs/blob/master/docs/schema-object-type.md
             // does the type even matter?
-            descriptor
-                .Field(query => query.Users)
-                .Type<NonNullType<ListType<NonNullType<UserType>>>>();
+            // descriptor
+            // .Field(query => query.Users)
+            // .Type<NonNullType<ListType<NonNullType<UserType>>>>();
             // .UsePaging<NonNull<UserType>>();
 
-            descriptor
-                .Field(query => query.Groups)
-                .Type<NonNullType<ListType<NonNullType<GroupType>>>>();
+            // descriptor
+            // .Field(query => query.Groups)
+            // .Type<NonNullType<ListType<NonNullType<GroupType>>>>();
             // .UsePaging<NonNull<GroupType>>();
 
 
@@ -28,20 +30,28 @@ namespace RibbleChatServer.GraphQL
 
     }
 
-    public class Query
+    public class UserFilteringType : FilterInputType<User>
     {
-        private MainDbContext UserDb;
-
-        public Query(MainDbContext userDb)
+        protected override void Configure(IFilterInputTypeDescriptor<User> descriptor)
         {
-            this.UserDb = userDb;
         }
 
-        [UseFiltering]
-        public IQueryable<User> Users => UserDb.Users.Include(user => user.Groups);
+    }
+
+    public class Query
+    {
+        private MainDbContext db;
+
+        public Query(MainDbContext db)
+        {
+            this.db = db;
+        }
+
+        [UseFiltering(typeof(UserFilteringType))]
+        public IQueryable<User> Users => db.Users.Include(user => user.Groups);
 
         [UseFiltering]
-        public IQueryable<Group> Groups => UserDb.Groups.Include(group => group.Users);
+        public IQueryable<Group> Groups => db.Groups.Include(group => group.Users);
     }
 
 
