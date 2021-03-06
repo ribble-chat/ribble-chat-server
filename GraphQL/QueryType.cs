@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using HotChocolate.Data;
+using HotChocolate.AspNetCore.Authorization;
 using HotChocolate.Data.Filters;
 using HotChocolate.Types;
 using Microsoft.EntityFrameworkCore;
@@ -48,9 +49,11 @@ namespace RibbleChatServer.GraphQL
         }
 
         [UseFiltering(typeof(UserFilteringType))]
+        [Authorize]
         public IQueryable<User> Users => db.Users.Include(user => user.Groups);
 
         [UseFiltering]
+        [Authorize]
         public IQueryable<Group> Groups => db.Groups.Include(group => group.Users);
     }
 

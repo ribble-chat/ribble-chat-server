@@ -1,6 +1,9 @@
 using System;
 using RibbleChatServer.Services;
 using RibbleChatServer.GraphQL.ResultTypes;
+using HotChocolate.AspNetCore.GraphiQL;
+using HotChocolate.AspNetCore.Playground;
+using HotChocolate.AspNetCore.Voyager;
 using HotChocolate;
 using StackExchange.Redis;
 using Microsoft.AspNetCore.Builder;
@@ -34,6 +37,7 @@ namespace RibbleChatServer
 
             // Cassandra is thread-safe I think
             services.AddSingleton<IMessageDb, MessageDb>();
+
             services.AddAuthentication();
             services.AddSignalR();
             services
@@ -42,7 +46,7 @@ namespace RibbleChatServer
                 .UseSnakeCaseNamingConvention());
 
             services
-                .AddIdentity<User, Models.Role>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddIdentity<User, Models.Role>()
                 .AddEntityFrameworkStores<MainDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -52,6 +56,7 @@ namespace RibbleChatServer
             services.AddScoped<Mutation>();
             services
                 .AddGraphQLServer()
+                .AddAuthorization()
                 .EnableRelaySupport()
                 .AddType(new UuidType(defaultFormat: 'B'))
                 .AddType<UserType>()
@@ -69,7 +74,7 @@ namespace RibbleChatServer
             services.Configure<IdentityOptions>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
-                // disable identity validation and use zxcvbn
+                // disable identity password validation and use zxcvbn
                 options.Password = new PasswordOptions
                 {
                     RequireDigit = false,
@@ -78,7 +83,6 @@ namespace RibbleChatServer
                     RequiredLength = 0,
                     RequireLowercase = false,
                     RequiredUniqueChars = 1,
-
                 };
 
                 options.Lockout = new LockoutOptions
@@ -99,9 +103,8 @@ namespace RibbleChatServer
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-                options.LoginPath = "/api/identity/account/login";
                 options.SlidingExpiration = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
             });
 
             services.AddCors(options =>
@@ -129,16 +132,17 @@ namespace RibbleChatServer
             }
 
             // app.UseHttpsRedirection();
-            app.UseWebSockets();
             app.UseCors();
+            app.UseWebSockets();
+
+            app.UsePlayground();
+            app.UseGraphiQL("/graphql", "/graphiql");
+            app.UseVoyager("/graphql", "/voyager");
+
             app.UseRouting();
+
             app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseGraphiQLServer();
-            app.UseGraphQLAltair();
-            app.UseGraphQLVoyager();
-            app.UsePlayground();
 
             app.UseEndpoints(endpoints =>
             {
