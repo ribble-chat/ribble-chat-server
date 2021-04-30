@@ -9,15 +9,15 @@
     <PackageReference Include="CassandraCSharpDriver" Version="3.16.2" />
     <PackageReference Include="EFCore.NamingConventions" Version="5.0.2" />
     <PackageReference Include="EntityFramework" Version="6.4.4" />
-    <PackageReference Include="HotChocolate.AspNetCore" Version="11.0.9" />
-    <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="11.0.9" />
+    <PackageReference Include="HotChocolate.AspNetCore" Version="11.1.0" />
+    <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="11.1.0" />
     <PackageReference Include="HotChocolate.AspNetCore.GraphiQL" Version="10.5.5" />
     <PackageReference Include="HotChocolate.AspNetCore.Playground" Version="10.5.5" />
     <PackageReference Include="HotChocolate.AspNetCore.Voyager" Version="10.5.5" />
-    <PackageReference Include="HotChocolate.Data" Version="11.0.9" />
-    <PackageReference Include="HotChocolate.Data.EntityFramework" Version="11.0.9" />
-    <PackageReference Include="HotChocolate.Subscriptions" Version="11.0.9" />
-    <PackageReference Include="HotChocolate.Subscriptions.Redis" Version="11.0.9" />
+    <PackageReference Include="HotChocolate.Data" Version="11.1.0" />
+    <PackageReference Include="HotChocolate.Data.EntityFramework" Version="11.1.0" />
+    <PackageReference Include="HotChocolate.Subscriptions" Version="11.1.0" />
+    <PackageReference Include="HotChocolate.Subscriptions.Redis" Version="11.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.MessagePack" Version="5.0.2" />
